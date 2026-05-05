@@ -5,7 +5,7 @@ from database.db_settings import Base, engine, get_db
 from fastapi import FastAPI
 
 #Routes
-from routes import users
+from routers import users
 
 #Start DataBase
 Base.metadata.create_all(engine)
