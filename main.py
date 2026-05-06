@@ -5,7 +5,7 @@ from database.db_settings import Base, engine, get_db
 from fastapi import FastAPI
 
 #Routes
-from routers import users, auth
+from routers import users, auth, product
 
 #Start DataBase
 Base.metadata.create_all(engine)
@@ -22,3 +22,4 @@ def read_root():
 #Conneting Routes
 api.include_router(auth.router)
 api.include_router(users.router)
+api.include_router(product.router)
