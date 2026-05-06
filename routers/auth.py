@@ -1,0 +1,32 @@
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+from database.db_settings import get_db
+from database.models import User
+from schemas import LoginRequest, UserCreate
+
+router = APIRouter()
+
+@router.post("/login")
+def login(req: LoginRequest, db: Session = Depends(get_db)):
+     
+    if not db.query(User).filter(User.email == req.email).first():
+        raise HTTPException(status_code=401, detail="Email not found!")
+    
+    return {"message": "Access Permitted!"}
+
+@router.post("/singin")
+def signin(user: UserCreate, db: Session = Depends(get_db)):
+    if db.query(User).filter(User.email == user.email).first():
+        raise HTTPException(status_code=409, detail="Email already registered")
+    
+    new_user = User(
+        full_name = user.full_name,
+        email = user.email,
+        password = user.password,
+        role = user.role
+    )
+    
+    db.add(new_user)
+    db.commit()
+    
+    return {"message": "User registered!"}
