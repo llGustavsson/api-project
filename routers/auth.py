@@ -9,8 +9,10 @@ router = APIRouter()
 @router.post("/login")
 def login(req: LoginRequest, db: Session = Depends(get_db)):
      
-    if not db.query(User).filter(User.email == req.email).first():
-        raise HTTPException(status_code=401, detail="Email not found!")
+    test_email = db.query(User).filter(User.email == req.email).first()
+    test_password = db.query(User).filter(User.password == req.password).first()
+    if not test_email or not test_password:
+        raise HTTPException(status_code=401, detail="Email or password incorrect!")
     
     return {"message": "Access Permitted!"}
 
